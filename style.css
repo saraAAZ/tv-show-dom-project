@@ -1,3 +1,46 @@
+*{
+  margin: 0px;
+  padding: 0px;
+}
 #root {
   color: red;
+}
+/* body{
+} */
+#cards-conatiner{
+  display: flex;
+  width :100!;
+  flex-wrap: wrap;
+
+  
+}
+.card{
+  display: flex;
+  align-items: center;
+  flex-direction:column ;
+  width: 200px;
+  height: 22em;
+  border: 1px solid grey ;
+  padding: 1.5% 0 1.5% 0;
+  margin: 2%;
+}
+.img-movie{
+  width: 80%;
+  height: 15em;
+}
+.card h2{
+  font-size: 15px;
+}
+.searchInput-block{
+  display: none;
+}
+.searchInput-run{
+  display: block;
+}
+.select-width{
+  width : 100px;
+  color: black;
+}
+.select-width option{
+  color: black;
 }
