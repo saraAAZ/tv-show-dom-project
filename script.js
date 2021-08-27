@@ -1,161 +1,82 @@
 //You can edit ALL of the code here
-let cardsContainer = document.getElementById("cards-conatiner");
-let serachInput = document.getElementById("search");
-let searchLength = document.getElementById("searchLength");
-let selectedMovieContainer= document.getElementById("selectedMovie");
-let selectMovie =  document.createElement("select");
-let selectedEpisodShow= document.getElementById("selected-Episod-show");
-selectMovie.className="select-width";
-let n = 0;
-
-  
-let allEpisodes=[];
-console.log(allEpisodes);
-let searchArray=[];
-setup();
-selectMoviefunction();
-// selectMoviefunction();
+let allEpisodUrl="https://api.tvmaze.com/shows/82/episodes";
+let EpisodContainer = document.getElementById("all-episods");
+let movieEpisode= document.getElementById("movie-episode");
+let searchMovie= document.getElementById("search-movie");
+let serchedEpisode = document.getElementById("serched-episode");
+let allEpisodArray=[];
+let searcedCounter = 0;
 function setup() {
-   allEpisodes = getAllEpisodes();
-    makePageForEpisodes(allEpisodes);
+  const allEpisodes = getAllEpisodes();
+  makePageForEpisodes(allEpisodes);
 }
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 }
-
-showEpisod(allEpisodes);
-function showEpisod(array){
-
-  array.forEach(element =>{
-   let counetr = 0;
-    creatCard(element);
-    counetr++;
+getAllEpisode();
+function getAllEpisode(){
+  fetch(allEpisodUrl).then(response=>{
+    return response.json();
+  }).then(data=>{
+    
+    data.forEach(element=>{
+      createCard(element,"EpisodContainer");
+      allEpisodArray.push(element);
+    });
+    }).catch(error =>{
+    alert(error)
   })
-  console.log(array.length);
 }
-
-
-function creatCard(element){
-  
-  let card=document.createElement("div");
-  card.className="card";
-  let imgMovie=document.createElement("img");
-  imgMovie.className="img-movie";
-  let episodName = document.createElement("h2");
-  let episodNumber = document.createElement("h2");
-  let seasonNumber = document.createElement("h2");
-  let episodSummery = document.createElement("h2");
-  let watchButton = document.createElement("button");
-  let anchorButton = document.createElement("a");
-  watchButton.innerText="Watch";
- 
-
-  episodName.innerText = element.name;
-  imgMovie.src=element.image.medium;
-  episodSummery.innerHTML=element.summary;
-  anchorButton.href=element.url;
-  
+function createCard(element,container){
+  let card = document.createElement("div");//container
+  let episodName=document.createElement("h2");//name+season+episode
+  let episodSummary=document.createElement("div");//summary
+  let episodImg=document.createElement("img");//image
+  let season ,number;
+  if(element.season < 10){
+    season=`0${element.season}`;
+  }else{
+    season=`${element.season}`;
+  }
+  if(element.number < 10){
+    number=`0${element.number}`;
+  }else{
+    number=`${element.number}`;
+  }
+  episodName.innerText=`${element.name} - S${season}E${number}`;
+  episodSummary.innerHTML=element.summary;
+  episodImg.src=element.image.medium;
 
   card.appendChild(episodName);
-  card.appendChild(imgMovie);
-  card.appendChild(episodSummery);
-  card.appendChild(seasonNumber);
-  card.appendChild(episodNumber);
-  card.appendChild(episodSummery);
-  watchButton.appendChild(anchorButton);
-  card.appendChild(watchButton);
-  cardsContainer.appendChild(card);
+  card.appendChild(episodImg);
+  card.appendChild(episodSummary);
+  if(container== "EpisodContainer"){
+     EpisodContainer.appendChild(card);
+     EpisodContainer.style.display="none";
+    }else if (container == "serchedEpisode"){
+      if(searcedCounter==0){
+        serchedEpisode.appendChild(card);
+        EpisodContainer.style.display="none";
+      }
+      
+    }
+ 
+
 
 }
-serachInput.addEventListener('keyup',(e)=>{
+searchMovie.addEventListener('keyup',(e)=>{
   const searchString = e.target.value.toLowerCase();
-  console.log(searchString);
-  if(searchString.split('')!=''){
-    const searchArray =allEpisodes.filter(character =>{
+  if(searchString.trim("")!=""){
+    const searchArray =allEpisodArray.filter(character =>{
     return(character.name.toLowerCase().includes(searchString)|| 
     character.summary.toLowerCase().includes(searchString));
-   
-   
-  });
-  searchLength.classList.remove("searchInput-block");
-  searchLength.classList.add("searchInput-run");
-
-  searchLength.textContent = `Got ${searchArray.length} / 73 episode(s)`;
-
-  showEpisod(searchArray);
-
-  }else{
-    showEpisod(allEpisodes);
-    searchLength.classList.remove("searchInput-run");
-    searchLength.classList.add("searchInput-block");
-   
-  }
-});
-
+    });
+    console.log(searchArray);
+    searchArray.forEach(element=>{
+      createCard(element,"serchedEpisode");
+    })
+    searcedCounter++;
+ }});
 window.onload = setup;
-function selectMoviefunction(){
-  
-  setup();
-
-  allEpisodes.forEach(element => {
-    creatOption(element);
-  });
-  selectedMovieContainer.appendChild(selectMovie);
-
-} 
-
-function creatOption(element){
-  let movieOption = document.createElement("option"); 
-
-  movieOption.value=element.name;
-  movieOption.innerText=element.name;
-  console.log(movieOption.value);
-  movieOption.className="selected";
-  
-  selectMovie.appendChild(movieOption);
-  
-}
-selectMovie.addEventListener('change', selected=>{
-    console.log(selected.target.value);
-    allEpisodes.forEach(element=>{
-      if(selected.target.value == element.name){
-        creatCardEpisod(element);
-      }})
-      cardsContainer.style.display="none";
-      
-  
-  });
-  function creatCardEpisod(element)
-  {
-    let card=document.createElement("div");
-  card.className="card";
-  let imgMovie=document.createElement("img");
-  imgMovie.className="img-movie";
-  let episodName = document.createElement("h2");
-  let episodNumber = document.createElement("h2");
-  let seasonNumber = document.createElement("h2");
-  let episodSummery = document.createElement("h2");
-  let watchButton = document.createElement("button");
-  let anchorButton = document.createElement("a");
-  watchButton.innerText="Watch";
- 
-
-  episodName.innerText = element.name;
-  imgMovie.src=element.image.medium;
-  episodSummery.innerHTML=element.summary;
-  anchorButton.href=element.url;
-  
-
-  card.appendChild(episodName);
-  card.appendChild(imgMovie);
-  card.appendChild(episodSummery);
-  card.appendChild(seasonNumber);
-  card.appendChild(episodNumber);
-  card.appendChild(episodSummery);
-  watchButton.appendChild(anchorButton);
-  card.appendChild(watchButton);
-  selectedMovieContainer.appendChild(card);
-
-  }
