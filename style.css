@@ -2,45 +2,32 @@
   margin: 0px;
   padding: 0px;
 }
-#root {
-  color: red;
-}
-/* body{
-} */
-#cards-conatiner{
+#all-episods{
   display: flex;
-  width :100!;
+  flex-direction:row;
+  justify-content: center;
+  width: 100%;
   flex-wrap: wrap;
-
-  
+  margin: 2% 0;
 }
-.card{
+.card-container{
   display: flex;
   align-items: center;
   flex-direction:column ;
-  width: 200px;
-  height: 22em;
-  border: 1px solid grey ;
+  width: 24%;
+  height: 25em;
+  border: 1px solid rgba(16, 76, 133, 0.59) ;
   padding: 1.5% 0 1.5% 0;
   margin: 2%;
+  box-shadow: 0px 6px 10px -6px rgba(16, 76, 133, 0.59);
+  border-radius: 10px;
+  padding: 2%;
 }
-.img-movie{
-  width: 80%;
-  height: 15em;
+.img-style{
+  margin:.5%;
+  width: 320px;
+  height: 200px;
 }
-.card h2{
-  font-size: 15px;
-}
-.block{
-  display: none;
-}
-.run{
-  display: block;
-}
-.select-width{
-  width : 100px;
-  color: black;
-}
-.select-width option{
-  color: black;
+.card-container >div{
+  padding: 1% 0 0 0 ;
 }
